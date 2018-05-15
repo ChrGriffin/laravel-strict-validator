@@ -67,7 +67,7 @@ class StrictValidator
 
         // recursively perform the same validation on any nested arrays
         foreach($data as $dataIndex => $dataValue) {
-            if(is_array($dataValue)) {
+            if(is_array($dataValue) && $this->_isAssociative($dataValue)) {
                 $nestedStructure = [];
                 $regex = '/^' . $dataIndex . '.(\w+)/';
 
@@ -85,5 +85,19 @@ class StrictValidator
         }
 
         return true;
+    }
+
+    /**
+     * Determines whether a given array is an associative array or not.
+     *
+     * @param array $array
+     * @return bool
+     */
+    private function _isAssociative(array $array) : bool
+    {
+        if([] === $array) {
+            return false;
+        }
+        return array_keys($array) !== range(0, count($array) - 1);
     }
 }
